@@ -1,0 +1,8 @@
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\bin\Debug\AHPConsole.exe.config
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\bin\Debug\AHPConsole.exe
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\bin\Debug\AHPConsole.pdb
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\bin\Debug\AHPLib.dll
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\bin\Debug\AHPLib.pdb
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\obj\Debug\AHPConsole.csprojResolveAssemblyReference.cache
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\obj\Debug\AHPConsole.exe
+h:\users\filip\documents\visual studio 2015\Projects\AHPConsole\AHPConsole\obj\Debug\AHPConsole.pdb
