@@ -11,6 +11,7 @@ namespace AHPLib
         private int id;
         private string naziv;
         private Kriterij roditelj;
+        
 
         public Kriterij()
         {

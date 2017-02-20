@@ -16,77 +16,108 @@ namespace AHPConsole
 
             Executor executor = new Executor();
             List<Kriterij> listaKriterija = new List<Kriterij>();
+            double[,] matricaKriterija;
 
-            while (kraj == false){
-                Console.WriteLine("1. Unos alternative, 2. Unos kriterija, 3. Ispis kriterija, 9. Izlaz");
 
-                switch (Console.ReadLine())
+
+
+            //while (kraj == false){
+            //    Console.WriteLine("1. Unos alternative, 2. Unos kriterija, 3. Ispis kriterija, 9. Izlaz");
+
+            //    switch (Console.ReadLine())
+            //    {
+            //        case "1":
+            //            Console.WriteLine("---Odabrali ste unos alternative---");
+            //            Console.WriteLine("Naziv alternative: ");
+            //            string alternativa = Console.ReadLine();
+            //            executor.DodajAlternativu(alternativa);
+
+            //            break;
+            //        case "2":
+            //            Console.WriteLine("---Odabrali ste unos kriterija---");
+            //            Console.WriteLine("Naziv kriterija: ");
+            //            executor.DodajKriterij(Console.ReadLine(), -1);
+
+            //            break;
+            //        case "3":
+            //            Console.WriteLine("---Odabrali ste ispis kriterija---");
+            //            listaKriterija = executor.DohvatiListuKriterija();
+
+            //            for (int i = 0; i < listaKriterija.Count; i++)
+            //            {
+            //                Kriterij kriterij = new Kriterij();
+            //                kriterij = listaKriterija[i];
+            //                if(kriterij.Roditelj != null)
+            //                {
+            //                    Console.WriteLine(kriterij.Naziv + " -->  " + kriterij.Id + "  ===  " + executor.DohvatiKriterijPremaId(kriterij.Roditelj.Id).Naziv);
+            //                }else
+            //                {
+            //                    Console.WriteLine(kriterij.Naziv + " -->  " + kriterij.Id + "  ===  " + "'bez roditelja'");
+            //                }
+
+            //            }
+
+            //            while(nastaviti == true)
+            //            {
+            //                Console.WriteLine("1 ---> Dodati podkriterij");
+            //                Console.WriteLine("2 ---> Nastaviti bez dodavanja podkriterija");
+            //                if (Console.ReadLine() == "1")
+            //                {
+            //                    Console.WriteLine("Unesi naziv podkriterija ");
+            //                    string nazivPodkriterija = Console.ReadLine();
+            //                    Console.WriteLine("Unesi id roditelja ");
+            //                    int idRoditelja = Convert.ToInt32(Console.ReadLine());
+            //                    executor.DohvatiKriterijPremaId(idRoditelja);
+            //                    executor.DodajKriterij(nazivPodkriterija, idRoditelja);
+            //                    nastaviti = true;
+            //                }else
+            //                {
+            //                    nastaviti = false;
+            //                }
+            //            }
+
+
+
+            //            break;
+            //        case "9":
+            //            kraj = true;
+            //            break;
+            //        default:
+            //            Console.WriteLine("---Pogrešan unos---");
+            //            break;
+
+            //    }
+            //}
+
+
+            matricaKriterija = executor.KreirajNovuMatricuKriterija();
+            listaKriterija = executor.DohvatiListuKriterija();
+
+            for (int i = 0; i < listaKriterija.Count; i++)
+            {
+                Kriterij kriterij1 = new Kriterij();
+                kriterij1 = listaKriterija[i];
+                for (int j = 0; j < listaKriterija.Count; j++)
                 {
-                    case "1":
-                        Console.WriteLine("---Odabrali ste unos alternative---");
-                        Console.WriteLine("Naziv alternative: ");
-                        string alternativa = Console.ReadLine();
-                        executor.DodajAlternativu(alternativa);
-
-                        break;
-                    case "2":
-                        Console.WriteLine("---Odabrali ste unos kriterija---");
-                        Console.WriteLine("Naziv kriterija: ");
-                        executor.DodajKriterij(Console.ReadLine(), -1);
-
-                        break;
-                    case "3":
-                        Console.WriteLine("---Odabrali ste ispis kriterija---");
-                        listaKriterija = executor.DohvatiListuKriterija();
-
-                        for (int i = 0; i < listaKriterija.Count; i++)
-                        {
-                            Kriterij kriterij = new Kriterij();
-                            kriterij = listaKriterija[i];
-                            if(kriterij.Roditelj != null)
-                            {
-                                Console.WriteLine(kriterij.Naziv + " -->  " + kriterij.Id + "  ===  " + executor.DohvatiKriterijPremaId(kriterij.Roditelj.Id).Naziv);
-                            }else
-                            {
-                                Console.WriteLine(kriterij.Naziv + " -->  " + kriterij.Id + "  ===  " + "'bez roditelja'");
-                            }
-                           
-                        }
-
-                        while(nastaviti == true)
-                        {
-                            Console.WriteLine("1 ---> Dodati podkriterij");
-                            Console.WriteLine("2 ---> Nastaviti bez dodavanja podkriterija");
-                            if (Console.ReadLine() == "1")
-                            {
-                                Console.WriteLine("Unesi naziv podkriterija ");
-                                string nazivPodkriterija = Console.ReadLine();
-                                Console.WriteLine("Unesi id roditelja ");
-                                int idRoditelja = Convert.ToInt32(Console.ReadLine());
-                                executor.DohvatiKriterijPremaId(idRoditelja);
-                                executor.DodajKriterij(nazivPodkriterija, idRoditelja);
-                                nastaviti = true;
-                            }else
-                            {
-                                nastaviti = false;
-                            }
-                        }
-                        
-      
-
-                        break;
-                    case "9":
-                        kraj = true;
-                        break;
-                    default:
-                        Console.WriteLine("---Pogrešan unos---");
-                        break;
-
+                    Kriterij kriterij2 = new Kriterij();
+                    kriterij2 = listaKriterija[j];
+                    double vrijednost = 1;
+                    
+                    if (i < j)
+                    {
+                        Console.WriteLine(kriterij1.Naziv + " - " + kriterij2.Naziv);
+                        vrijednost = Convert.ToInt32(Console.ReadLine());
+                        matricaKriterija[i, j] = vrijednost;
+                        matricaKriterija[j, i] = 1 / vrijednost;
+                    }else if(i == j)
+                    {
+                        matricaKriterija[i, j] = 1;
+                    }
                 }
             }
-            Console.ReadLine();
-            
+            matricaKriterija[0, 0] = 1;
 
+            Console.ReadLine();
 
         }
     }
