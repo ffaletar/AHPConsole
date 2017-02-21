@@ -25,11 +25,11 @@ namespace AHPLib
             Alternativa alternativa5 = new Alternativa("Mercedes");
 
             Kriterij kriterij1 = new Kriterij("Cijena",0, null);
-            Kriterij kriterij2 = new Kriterij("Kvaliteta", 1, null);
-            Kriterij kriterij3 = new Kriterij("Izgled", 2, null);
+            Kriterij kriterij2 = new Kriterij("Trajanje", 1, null);
+            Kriterij kriterij3 = new Kriterij("Destinacija", 2, null);
             Kriterij kriterij4 = new Kriterij("Boja", 3, kriterij3);
             Kriterij kriterij5 = new Kriterij("Oblik", 4, kriterij3);
-            Kriterij kriterij6 = new Kriterij("Gume", 5, null);
+            Kriterij kriterij6 = new Kriterij("Udaljenost", 5, null);
 
             listaKriterija.Add(kriterij1);
             listaKriterija.Add(kriterij2);
@@ -96,30 +96,58 @@ namespace AHPLib
             return kriterij;
         }
 
+        //samo za kreiranje matrice prema primljenoj listi kriterija, odnosno prema razinama
         public double[,] KreirajNovuMatricuKriterija(List<Kriterij> primljenaListaKriterija)
         {
+            
             int brojKriterija = primljenaListaKriterija.Count();
             matricaKriterija = new double[brojKriterija, brojKriterija];
-           
+
             return matricaKriterija;
         }
 
-        //public List<Kriterij>[] DohvatiSkupineKriterija()
-        //{
-        //    skupineKriterija = new List<Kriterij>[100];
+        public Dictionary<string, double> IzracunajVrijednostKriterija(double[,] kriteriji, List<Kriterij> kriterijiLista)
+        {
+            Dictionary<string, double> dic = new Dictionary<string, double>();
+            List<double> zbrojStupaca = new List<double>();
+            List<double> vrijednostKriterija = new List<double>();
 
-        //    for(int i = 0; i<listaKriterija.Count; i++)
-        //    {
+            int brojKriterija = (int)Math.Sqrt(kriteriji.Length);
 
+            double[,] prepravljenoPolje = new double[brojKriterija, brojKriterija];
 
+            for (int j = 0; j < Math.Sqrt(kriteriji.Length); j++)
+            {
+                double zbroj = 0;
 
-        //    }
-        //}
+                for (int i = 0; i < Math.Sqrt(kriteriji.Length); i++)
+                {
+                    zbroj = zbroj + kriteriji[i, j];
+                }
+
+                zbrojStupaca.Add(zbroj);
+            }
+
+            for (int i = 0; i < Math.Sqrt(kriteriji.Length); i++)
+            {
+                double zbrojRedaka = 0;
+                string ime;
+                for (int j = 0; j < Math.Sqrt(kriteriji.Length); j++)
+                {
+                    prepravljenoPolje[i,j] = kriteriji[i, j] / zbrojStupaca[j];
+                    zbrojRedaka = zbrojRedaka + prepravljenoPolje[i, j];
+                }
+                Kriterij kriterij = new Kriterij();
+                kriterij = kriterijiLista[i];
+
+                dic.Add(kriterij.Naziv, zbrojRedaka / Math.Sqrt(kriteriji.Length));
+            }
+
+            return dic;
+        }
 
         public List<Kriterij>[] KreirajSkupineKriterija()
         {
-
-            
             IEnumerable<Kriterij> enumerable = Enumerable.Empty<Kriterij>();
             enumerable = listaKriterija.GroupBy(x => x.Roditelj).Select(x => x.First());
             List<Kriterij> listaKriterijaNumerable = enumerable.ToList();
@@ -142,12 +170,9 @@ namespace AHPLib
                 {
                     ime = "lista00";
                 }
-                
 
                 List<Kriterij> lista = new List<Kriterij>();
                 tbl.Add(ime, lista);
-
-              
             }
 
 
@@ -167,16 +192,6 @@ namespace AHPLib
                     tbl["lista00"].Add(kriterij);
                 }
                 
-                //else
-                //{
-                //    testList.Add(key[index], new List<long> { val[index] });
-                //}    
-                
-
-                //if (kriterij.Roditelj == null)
-                //{
-                //    listaPrveRazine.Add(kriterij);
-                //}
             }
             int a = 0;
             foreach (KeyValuePair<string, List<Kriterij>> lista in tbl)
@@ -189,6 +204,5 @@ namespace AHPLib
             //poljeListaPoRazinama[0] = listaPrveRazine;
             return poljeListaPoRazinama;
         }
-
     }
 }

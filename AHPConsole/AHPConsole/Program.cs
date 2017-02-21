@@ -17,8 +17,9 @@ namespace AHPConsole
             Executor executor = new Executor();
             List<Kriterij> listaKriterija = new List<Kriterij>();
             List<Kriterij>[] poljeListaKriterija = new List<Kriterij>[5];
+            Dictionary<string, double> vrijednostKriterija = new Dictionary<string, double>();
             double[,] matricaKriterija;
-
+            Dictionary<string, Dictionary<string, double>> popisVrijednostiKriterija = new Dictionary<string, Dictionary<string, double>>();
 
 
 
@@ -97,6 +98,7 @@ namespace AHPConsole
                 listaKriterija = poljeListaKriterija[a];
 
                 matricaKriterija = executor.KreirajNovuMatricuKriterija(listaKriterija);
+                
                 //listaKriterija = executor.DohvatiListuKriterija();
 
                 for (int i = 0; i < listaKriterija.Count; i++)
@@ -112,7 +114,7 @@ namespace AHPConsole
                         if (i < j)
                         {
                             Console.WriteLine(kriterij1.Naziv + " - " + kriterij2.Naziv);
-                            vrijednost = Convert.ToInt32(Console.ReadLine());
+                            vrijednost = Convert.ToDouble(Console.ReadLine());
                             matricaKriterija[i, j] = vrijednost;
                             matricaKriterija[j, i] = 1 / vrijednost;
                         }
@@ -123,6 +125,23 @@ namespace AHPConsole
                     }
                 }
 
+                List<Kriterij> lisKrit = new List<Kriterij>();
+                string kriterijRoditeljNaziv = "";
+                lisKrit = poljeListaKriterija[a];
+                if(lisKrit[0].Roditelj != null)
+                {
+                    kriterijRoditeljNaziv = lisKrit[0].Roditelj.Naziv;
+                }
+                else
+                {
+                    kriterijRoditeljNaziv = "null";
+                }
+
+
+                vrijednostKriterija = executor.IzracunajVrijednostKriterija(matricaKriterija, listaKriterija);
+
+
+                popisVrijednostiKriterija.Add(kriterijRoditeljNaziv, vrijednostKriterija);
 
             }
 
