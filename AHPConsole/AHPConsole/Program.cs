@@ -16,6 +16,7 @@ namespace AHPConsole
 
             Executor executor = new Executor();
             List<Kriterij> listaKriterija = new List<Kriterij>();
+            List<Kriterij>[] poljeListaKriterija = new List<Kriterij>[5];
             double[,] matricaKriterija;
 
 
@@ -89,35 +90,47 @@ namespace AHPConsole
             //    }
             //}
 
+            poljeListaKriterija = executor.KreirajSkupineKriterija();
 
-            matricaKriterija = executor.KreirajNovuMatricuKriterija();
-            listaKriterija = executor.DohvatiListuKriterija();
-
-            for (int i = 0; i < listaKriterija.Count; i++)
+            for(int a = 0; a<poljeListaKriterija.Length; a++)
             {
-                Kriterij kriterij1 = new Kriterij();
-                kriterij1 = listaKriterija[i];
-                for (int j = 0; j < listaKriterija.Count; j++)
+                listaKriterija = poljeListaKriterija[a];
+
+                matricaKriterija = executor.KreirajNovuMatricuKriterija(listaKriterija);
+                //listaKriterija = executor.DohvatiListuKriterija();
+
+                for (int i = 0; i < listaKriterija.Count; i++)
                 {
-                    Kriterij kriterij2 = new Kriterij();
-                    kriterij2 = listaKriterija[j];
-                    double vrijednost = 1;
-                    
-                    if (i < j)
+                    Kriterij kriterij1 = new Kriterij();
+                    kriterij1 = listaKriterija[i];
+                    for (int j = 0; j < listaKriterija.Count; j++)
                     {
-                        Console.WriteLine(kriterij1.Naziv + " - " + kriterij2.Naziv);
-                        vrijednost = Convert.ToInt32(Console.ReadLine());
-                        matricaKriterija[i, j] = vrijednost;
-                        matricaKriterija[j, i] = 1 / vrijednost;
-                    }else if(i == j)
-                    {
-                        matricaKriterija[i, j] = 1;
+                        Kriterij kriterij2 = new Kriterij();
+                        kriterij2 = listaKriterija[j];
+                        double vrijednost = 1;
+
+                        if (i < j)
+                        {
+                            Console.WriteLine(kriterij1.Naziv + " - " + kriterij2.Naziv);
+                            vrijednost = Convert.ToInt32(Console.ReadLine());
+                            matricaKriterija[i, j] = vrijednost;
+                            matricaKriterija[j, i] = 1 / vrijednost;
+                        }
+                        else if (i == j)
+                        {
+                            matricaKriterija[i, j] = 1;
+                        }
                     }
                 }
-            }
-            matricaKriterija[0, 0] = 1;
 
-            Console.ReadLine();
+
+            }
+
+
+            
+            
+
+        Console.ReadLine();
 
         }
     }

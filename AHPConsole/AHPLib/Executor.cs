@@ -11,6 +11,7 @@ namespace AHPLib
         public List<Alternativa> listaAlternativa;
         public List<Kriterij> listaKriterija;
         private double[,] matricaKriterija;
+        List<Kriterij>[] skupineKriterija;
 
         public Executor()
         {
@@ -28,12 +29,14 @@ namespace AHPLib
             Kriterij kriterij3 = new Kriterij("Izgled", 2, null);
             Kriterij kriterij4 = new Kriterij("Boja", 3, kriterij3);
             Kriterij kriterij5 = new Kriterij("Oblik", 4, kriterij3);
+            Kriterij kriterij6 = new Kriterij("Gume", 5, null);
 
             listaKriterija.Add(kriterij1);
             listaKriterija.Add(kriterij2);
             listaKriterija.Add(kriterij3);
             listaKriterija.Add(kriterij4);
             listaKriterija.Add(kriterij5);
+            listaKriterija.Add(kriterij6);
 
             listaAlternativa.Add(alternativa1);
             listaAlternativa.Add(alternativa2);
@@ -93,14 +96,99 @@ namespace AHPLib
             return kriterij;
         }
 
-        public double[,] KreirajNovuMatricuKriterija()
+        public double[,] KreirajNovuMatricuKriterija(List<Kriterij> primljenaListaKriterija)
         {
-            int brojKriterija = listaKriterija.Count();
+            int brojKriterija = primljenaListaKriterija.Count();
             matricaKriterija = new double[brojKriterija, brojKriterija];
-
+           
             return matricaKriterija;
         }
 
+        //public List<Kriterij>[] DohvatiSkupineKriterija()
+        //{
+        //    skupineKriterija = new List<Kriterij>[100];
+
+        //    for(int i = 0; i<listaKriterija.Count; i++)
+        //    {
+
+
+
+        //    }
+        //}
+
+        public List<Kriterij>[] KreirajSkupineKriterija()
+        {
+
+            
+            IEnumerable<Kriterij> enumerable = Enumerable.Empty<Kriterij>();
+            enumerable = listaKriterija.GroupBy(x => x.Roditelj).Select(x => x.First());
+            List<Kriterij> listaKriterijaNumerable = enumerable.ToList();
+
+            List<Kriterij>[] poljeListaPoRazinama = new List<Kriterij>[listaKriterijaNumerable.Count];
+
+            Dictionary<string, List<Kriterij>> tbl = new Dictionary<string, List<Kriterij>>();
+            string ime = "";
+
+
+            for (int k=0; k<listaKriterijaNumerable.Count; k++)
+            {
+                Kriterij kriterij = new Kriterij();
+                kriterij = listaKriterijaNumerable[k];
+
+                if(kriterij.Roditelj != null)
+                {
+                    ime = "lista" + kriterij.Roditelj.Id;
+                }else
+                {
+                    ime = "lista00";
+                }
+                
+
+                List<Kriterij> lista = new List<Kriterij>();
+                tbl.Add(ime, lista);
+
+              
+            }
+
+
+            for (int i = 0; i < listaKriterija.Count; i++)
+            {
+                Kriterij kriterij = new Kriterij();
+                kriterij = listaKriterija[i];
+                if(kriterij.Roditelj != null)
+                {
+                    if (tbl.ContainsKey("lista" + kriterij.Roditelj.Id))
+                    {
+                        tbl["lista" + kriterij.Roditelj.Id].Add(kriterij);
+                    }
+                }
+                else
+                {
+                    tbl["lista00"].Add(kriterij);
+                }
+                
+                //else
+                //{
+                //    testList.Add(key[index], new List<long> { val[index] });
+                //}    
+                
+
+                //if (kriterij.Roditelj == null)
+                //{
+                //    listaPrveRazine.Add(kriterij);
+                //}
+            }
+            int a = 0;
+            foreach (KeyValuePair<string, List<Kriterij>> lista in tbl)
+            {
+                int velicinaPolja = poljeListaPoRazinama.Length;
+                poljeListaPoRazinama[a] = lista.Value;
+                a++;
+            }
+
+            //poljeListaPoRazinama[0] = listaPrveRazine;
+            return poljeListaPoRazinama;
+        }
 
     }
 }
