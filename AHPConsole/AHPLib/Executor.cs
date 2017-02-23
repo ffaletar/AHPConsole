@@ -24,7 +24,7 @@ namespace AHPLib
             Alternativa alternativa4 = new Alternativa("Golf 7");
             Alternativa alternativa5 = new Alternativa("Mercedes");
 
-            Kriterij kriterij1 = new Kriterij("Cijena",0, null);
+            Kriterij kriterij1 = new Kriterij("Cijena", 0, null);
             Kriterij kriterij2 = new Kriterij("Trajanje", 1, null);
             Kriterij kriterij3 = new Kriterij("Destinacija", 2, null);
             Kriterij kriterij4 = new Kriterij("Boja", 3, kriterij3);
@@ -99,7 +99,6 @@ namespace AHPLib
         //samo za kreiranje matrice prema primljenoj listi kriterija, odnosno prema razinama
         public double[,] KreirajNovuMatricuKriterija(List<Kriterij> primljenaListaKriterija)
         {
-            
             int brojKriterija = primljenaListaKriterija.Count();
             matricaKriterija = new double[brojKriterija, brojKriterija];
 
@@ -203,6 +202,132 @@ namespace AHPLib
 
             //poljeListaPoRazinama[0] = listaPrveRazine;
             return poljeListaPoRazinama;
+        }
+
+        public bool ProvjeriKonzistentnost(double[,] matrKriterija)
+        {
+            List<double> zbrojStupaca = new List<double>();
+            List<double> prosjekRetka = new List<double>();
+            List<double> vrijednostKriterija = new List<double>();
+            List<double> konzistentnostRetci = new List<double>();
+            bool konzistentno = false;
+
+            double CI = 0;
+            double CR = 0;
+            double lambdaZbroj = 0;
+            double lambda = 0;
+            int brojKriterija = (int)Math.Sqrt(matrKriterija.Length);
+
+            double[,] prepravljenoPolje = new double[brojKriterija, brojKriterija];
+            //ovaj dio koda se ponavlja, možda bi se moglo spojiti u jedno, zbog efikasnosti, odnosno zbog redundantnog izvršavanja for petlji
+
+            //zbroj stupaca matrice
+            for (int j = 0; j < Math.Sqrt(matrKriterija.Length); j++)
+            {
+                double zbroj = 0;
+
+                for (int i = 0; i < Math.Sqrt(matrKriterija.Length); i++)
+                {
+                    zbroj = zbroj + matrKriterija[i, j];
+                }
+
+                zbrojStupaca.Add(zbroj);
+            }
+            //zbroj redaka matrice
+            for (int i = 0; i < Math.Sqrt(matrKriterija.Length); i++)
+            {
+                double zbroj = 0;
+
+                for (int j = 0; j < Math.Sqrt(matrKriterija.Length); j++)
+                {
+                    zbroj = zbroj + matrKriterija[i, j];
+                }
+
+                prosjekRetka.Add(zbroj / Math.Sqrt(matrKriterija.Length));
+            }
+
+            for (int i = 0; i < Math.Sqrt(matrKriterija.Length); i++)
+            {
+                //double zbrojRedaka = 0;
+                string ime;
+                for (int j = 0; j < Math.Sqrt(matrKriterija.Length); j++)
+                {
+                    prepravljenoPolje[i, j] = matrKriterija[i, j] / zbrojStupaca[j];
+                    //zbrojRedaka = zbrojRedaka + prepravljenoPolje[i, j];
+                }
+            }
+            //Math.Sqrt(matrKriterija.Length)
+            for (int n=0; n< Math.Sqrt(matrKriterija.Length); n++)
+            {
+
+
+                konzistentnostRetci.Add(prosjekRetka[n] / prepravljenoPolje[n, n]);
+            }
+
+            for(int z=0; z<konzistentnostRetci.Count; z++)
+            {
+                lambdaZbroj = lambdaZbroj + konzistentnostRetci[z];
+            }
+
+            lambda = lambdaZbroj / Math.Sqrt(matrKriterija.Length);
+
+            CI = (lambda - Math.Sqrt(matrKriterija.Length)) / ((Math.Sqrt(matrKriterija.Length) - 1));
+            
+            CR = CI / DohvatiRI((int)Math.Sqrt(matrKriterija.Length));
+
+            if(CR > 0.1)
+            {
+                konzistentno = false;
+            }
+            else
+            {
+                konzistentno = true;
+            }
+
+            return konzistentno;
+        }
+
+        public double DohvatiRI(int brojKriterija)
+        {
+            double RI = 0;
+            switch (brojKriterija)
+            {
+                case 1:
+                    RI = 0;
+                    break;
+                case 2:
+                    RI = 0;
+                    break;
+                case 3:
+                    RI = 0.58;
+                    break;
+                case 4:
+                    RI = 0.9;
+                    break;
+                case 5:
+                    RI = 1.12;
+                    break;
+                case 6:
+                    RI = 1.24;
+                    break;
+                case 7:
+                    RI = 1.32;
+                    break;
+                case 8:
+                    RI = 1.41;
+                    break;
+                case 9:
+                    RI = 1.45;
+                    break;
+                case 10:
+                    RI = 1.49;
+                    break;
+                default:
+                    RI = 0;
+                    break;
+            }
+
+            return RI;
         }
     }
 }

@@ -23,7 +23,8 @@ namespace AHPConsole
 
 
 
-            //while (kraj == false){
+            //while (kraj == false)
+            //{
             //    Console.WriteLine("1. Unos alternative, 2. Unos kriterija, 3. Ispis kriterija, 9. Izlaz");
 
             //    switch (Console.ReadLine())
@@ -49,17 +50,18 @@ namespace AHPConsole
             //            {
             //                Kriterij kriterij = new Kriterij();
             //                kriterij = listaKriterija[i];
-            //                if(kriterij.Roditelj != null)
+            //                if (kriterij.Roditelj != null)
             //                {
             //                    Console.WriteLine(kriterij.Naziv + " -->  " + kriterij.Id + "  ===  " + executor.DohvatiKriterijPremaId(kriterij.Roditelj.Id).Naziv);
-            //                }else
+            //                }
+            //                else
             //                {
             //                    Console.WriteLine(kriterij.Naziv + " -->  " + kriterij.Id + "  ===  " + "'bez roditelja'");
             //                }
 
             //            }
 
-            //            while(nastaviti == true)
+            //            while (nastaviti == true)
             //            {
             //                Console.WriteLine("1 ---> Dodati podkriterij");
             //                Console.WriteLine("2 ---> Nastaviti bez dodavanja podkriterija");
@@ -72,7 +74,8 @@ namespace AHPConsole
             //                    executor.DohvatiKriterijPremaId(idRoditelja);
             //                    executor.DodajKriterij(nazivPodkriterija, idRoditelja);
             //                    nastaviti = true;
-            //                }else
+            //                }
+            //                else
             //                {
             //                    nastaviti = false;
             //                }
@@ -91,6 +94,8 @@ namespace AHPConsole
             //    }
             //}
 
+
+            //postupak usporedbe kriterija
             poljeListaKriterija = executor.KreirajSkupineKriterija();
 
             for(int a = 0; a<poljeListaKriterija.Length; a++)
@@ -98,32 +103,39 @@ namespace AHPConsole
                 listaKriterija = poljeListaKriterija[a];
 
                 matricaKriterija = executor.KreirajNovuMatricuKriterija(listaKriterija);
-                
+
+                bool konzistentno = false;
                 //listaKriterija = executor.DohvatiListuKriterija();
 
-                for (int i = 0; i < listaKriterija.Count; i++)
+                while (!konzistentno)
                 {
-                    Kriterij kriterij1 = new Kriterij();
-                    kriterij1 = listaKriterija[i];
-                    for (int j = 0; j < listaKriterija.Count; j++)
+                    for (int i = 0; i < listaKriterija.Count; i++)
                     {
-                        Kriterij kriterij2 = new Kriterij();
-                        kriterij2 = listaKriterija[j];
-                        double vrijednost = 1;
+                        Kriterij kriterij1 = new Kriterij();
+                        kriterij1 = listaKriterija[i];
+                        for (int j = 0; j < listaKriterija.Count; j++)
+                        {
+                            Kriterij kriterij2 = new Kriterij();
+                            kriterij2 = listaKriterija[j];
+                            double vrijednost = 1;
 
-                        if (i < j)
-                        {
-                            Console.WriteLine(kriterij1.Naziv + " - " + kriterij2.Naziv);
-                            vrijednost = Convert.ToDouble(Console.ReadLine());
-                            matricaKriterija[i, j] = vrijednost;
-                            matricaKriterija[j, i] = 1 / vrijednost;
-                        }
-                        else if (i == j)
-                        {
-                            matricaKriterija[i, j] = 1;
+                            if (i < j)
+                            {
+                                Console.WriteLine(kriterij1.Naziv + " - " + kriterij2.Naziv);
+                                vrijednost = Convert.ToDouble(Console.ReadLine());
+                                matricaKriterija[i, j] = vrijednost;
+                                matricaKriterija[j, i] = 1 / vrijednost;
+                            }
+                            else if (i == j)
+                            {
+                                matricaKriterija[i, j] = 1;
+                            }
                         }
                     }
+
+                    konzistentno = executor.ProvjeriKonzistentnost(matricaKriterija);
                 }
+                
 
                 List<Kriterij> lisKrit = new List<Kriterij>();
                 string kriterijRoditeljNaziv = "";
@@ -144,10 +156,9 @@ namespace AHPConsole
                 popisVrijednostiKriterija.Add(kriterijRoditeljNaziv, vrijednostKriterija);
 
             }
+            //kraj - postupak usporedbe kriterija 
+            //izlaz - dictionary s imenom kriterija 
 
-
-            
-            
 
         Console.ReadLine();
 
